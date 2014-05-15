@@ -13,8 +13,8 @@ The set of files in this repo is submitted as the Course Project of the '*Gettin
 
 * README.md -- this file
 * run_analysis.R -- R function carrying out the data cleaning process including (but not limited to): loading original data from R workspace, merging original raw data from several source files, cleaning data, renaming and selecting variables, saving complete tidy dataset, computing the average of each variable for each activity and each subject, saving them in a new data file 
-* TidyData.txt -- the tidy data set comprising all the observations for all the relevan variables
-* CodeBook.md -- this file gather in one single place all the relevant information for this course project. CodeBook.md provides detailed information on:
+* TidyData.txt -- the tidy data set comprising all the observations for all the relevant variables
+* CodeBook.md -- this file gathers in one single place all the relevant information for this course project. CodeBook.md provides detailed information on:
 	1. Origin of data
 	2. Experimental design
 	3. Description of the data in the tidy data set
