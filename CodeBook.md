@@ -314,7 +314,7 @@ This function only focuses on the tidy data set and the second, independent tidy
 Steps are as per assignment directions in :
 https://class.coursera.org/getdata-003/human_grading/view/courses/972136/assessments/3/submissions
 
-### !! The run_analysis() function require the `stringr` package to be installed
+### !! The run_analysis() function requires that the `stringr` package is already installed
 
 <u>STEP 1: Merges the training and the test sets to create one data set.</u>
 
