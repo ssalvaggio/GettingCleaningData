@@ -314,7 +314,14 @@ This function only focuses on the tidy data set and the second, independent tidy
 Steps are as per assignment directions in :
 https://class.coursera.org/getdata-003/human_grading/view/courses/972136/assessments/3/submissions
 
-### !! The run_analysis() function requires that the `stringr` package is already installed
+In order to properly run, the run_analysis() function needs stringr package to be installed and loaded. First task of the script is to check if the package is there; if not it will be installed and loaded
+
+    		if(sum(grepl('stringr', installed.packages()[,1])) == 0) {
+        		install.packages('stringr')
+       		library('stringr')
+    		} else {
+        		library('stringr')
+   		 	}
 
 <u>STEP 1: Merges the training and the test sets to create one data set.</u>
 

@@ -2,6 +2,15 @@
 ## Salvino A. Salvaggio - Mai 2014
 
 run_analysis <- function(){
+
+	    if(sum(grepl('stringr', installed.packages()[,1])) == 0) {
+        install.packages('stringr')
+        library('stringr')
+        
+    } else {
+        library('stringr')
+    }
+
     TestSubjectId <- read.table('subject_test.txt', header= FALSE)
     colnames(TestSubjectId) <- 'SubjectId'
     TestSubjectId$Group <- rep('Test', length(TestSubjectId))
