@@ -14,34 +14,37 @@ run_analysis <- function(){
     TestSubjectId <- read.table('subject_test.txt', header= FALSE)
     colnames(TestSubjectId) <- 'SubjectId'
     TestSubjectId$Group <- rep('Test', length(TestSubjectId))
+    
     TrainingSubjectId <- read.table('subject_train.txt', header= FALSE)
     colnames(TrainingSubjectId) <- 'SubjectId'
     TrainingSubjectId$Group <- rep('Training', length(TrainingSubjectId))
+    
     TestActivity <- read.table('y_test.txt', header=FALSE)
     colnames(TestActivity) <- 'ActivityCode'
+    
     ActivityLabels <- read.table('activity_labels.txt', header=FALSE, sep=' ')
     colnames(ActivityLabels) <- c('ActivityCode', 'Activity')
     TestActivity$Activity <- NA
     
-    activityrecode <- function() {
+    RecodeActivity <- function() {
         for(i in 1:6){
             TestActivity$Activity[TestActivity$ActivityCode == i] <<- 
                 as.character(ActivityLabels$Activity[ActivityLabels$ActivityCode 											== i])
         }
     }
-    activityrecode()
+    RecodeActivity()
     
     TrainingActivity <- read.table('y_train.txt', header=FALSE)
     colnames(TrainingActivity) <- 'ActivityCode'
     TrainingActivity$Activity <- NA
     
-    activityrecode2 <- function() {
+    RecodeActivity2 <- function() {
         for(i in 1:6){
             TrainingActivity$Activity[TrainingActivity$ActivityCode == i] 	<<- 
                 as.character(ActivityLabels$Activity[ActivityLabels$ActivityCode == i])
         }
     }
-    activityrecode2()
+    RecodeActivity2()
     
     TestData <- read.table('X_test.txt', header=FALSE)
     TrainingData <- read.table('X_train.txt', header=FALSE)
