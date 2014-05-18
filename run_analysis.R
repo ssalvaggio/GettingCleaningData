@@ -21,31 +21,31 @@ run_analysis <- function(){
     
     TestActivity <- read.table('y_test.txt', header=FALSE)
     colnames(TestActivity) <- 'ActivityCode'
+    TestActivity$Activity <- ''
+    z <- 'TEST'
     
     ActivityLabels <- read.table('activity_labels.txt', header=FALSE, sep=' ')
     colnames(ActivityLabels) <- c('ActivityCode', 'Activity')
-    TestActivity$Activity <- NA
     
-    RecodeActivity <- function() {
+    RecodeActivity <- function(object, z) {
+       Object <<- object
         for(i in 1:6){
-            TestActivity$Activity[TestActivity$ActivityCode == i] <<- 
-                as.character(ActivityLabels$Activity[ActivityLabels$ActivityCode 											== i])
+            Object$Activity[Object$ActivityCode == i] <<- 
+                as.character(ActivityLabels$Activity[ActivityLabels$ActivityCode == i])
         }
+        ifelse(z == 'TEST', TestActivity <<- Object, TrainingActivity <<- Object)
+       rm(Object, pos=.GlobalEnv)
+
     }
-    RecodeActivity()
+    RecodeActivity(TestActivity, z)
     
     TrainingActivity <- read.table('y_train.txt', header=FALSE)
     colnames(TrainingActivity) <- 'ActivityCode'
-    TrainingActivity$Activity <- NA
+    TrainingActivity$Activity <- ''
+    z <- 'TRAINING'
     
-    RecodeActivity2 <- function() {
-        for(i in 1:6){
-            TrainingActivity$Activity[TrainingActivity$ActivityCode == i] 	<<- 
-                as.character(ActivityLabels$Activity[ActivityLabels$ActivityCode == i])
-        }
-    }
-    RecodeActivity2()
-    
+    RecodeActivity(TrainingActivity, z)
+
     TestData <- read.table('X_test.txt', header=FALSE)
     TrainingData <- read.table('X_train.txt', header=FALSE)
     Features <- read.table('features.txt', header=FALSE)
@@ -73,13 +73,13 @@ run_analysis <- function(){
     colnames(Data) <- str_replace_all(colnames(Data), '^Angle', 'Angle\\.')
     colnames(Data) <- str_replace_all(colnames(Data), '\\.$', '')
     
-    Data <<- Data
+    TidyData <<- Data
     
     GenerateAverageSet <- function() {
         NewAverageData <<- data.frame()
         for(i in 1:30){
             for(n in 1:6){
-                Output <- Data[(Data$SubjectId == i & Data$ActivityCode == n),]
+                Output <- TidyData[(Data$SubjectId == i & TidyData$ActivityCode == n),]
                 Means <- t(colMeans(Output[5:90]))
                 
                 NewRow <- as.data.frame(c(Output[1,1:4], Means))
@@ -95,7 +95,7 @@ run_analysis <- function(){
     
     GenerateAverageSet()
     
-    write.table(Data, file='TidyData.txt', row.names=FALSE, sep='\t')
+    write.table(TidyData, file='TidyData.txt', row.names=FALSE, sep='\t')
     write.table(NewAverageData, file='NewAverageData.txt', row.names=FALSE, sep='\t')
 }
     

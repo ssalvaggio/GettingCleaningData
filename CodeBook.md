@@ -364,18 +364,22 @@ In order to properly run, the run_analysis() function needs stringr package to b
 		
 9. create new field in TestActivity
 
-		TestActivity$Activity <- NA
+		TestActivity$Activity <- ''
+    		z <- 'TEST'
 		
 10. Recode TestActivity in descriptive manner as per ActivityLabels
 		
-		recodeActivity <- function() {
-    			for(i in 1:6){
-      				TestActivity$Activity[TestActivity$ActivityCode == i] <<- 
-            			as.character(ActivityLabels$Activity[
-            			ActivityLabels$ActivityCode == i])
-    					}
-			}
-			recodeActivity()
+		RecodeActivity <- function(object, z) {
+       		Object <<- object
+        		for(i in 1:6){
+            			Object$Activity[Object$ActivityCode == i] <<- 
+                		as.character(ActivityLabels$Activity[ActivityLabels$ActivityCode == i])
+        		}
+        		ifelse(z == 'TEST', TestActivity <<- Object, TrainingActivity <<- Object)
+       		rm(Object, pos=.GlobalEnv)
+
+    			}
+    		RecodeActivity(TestActivity, z)
 			
 
 11. load 'y_train.txt' in R object TestActivity
@@ -390,20 +394,13 @@ In order to properly run, the run_analysis() function needs stringr package to b
 
 13. create new field in TrainingActivity
 		
-		TrainingActivity$Activity <- NA
+		TrainingActivity$Activity <- ''
+    		z <- 'TRAINING'
 		
 
 14. Recode TestActivity in descriptive manner as per ActivityLabels
 		
-		RecodeActivity2 <- function() {
-    				for(i in 1:6){
-       			 		TrainingActivity$Activity[
-       			 		TrainingActivity$ActivityCode ==  i]  
-       			 		<<- as.character(ActivityLabels$Activity[
-       			 		ActivityLabels$ActivityCode == i])
-    						}
-				}
-			RecodeActivity2()	
+			RecodeActivity(TrainingActivity, z)	
 		
 15. load data from the test 'X_test.txt' in R object
 
@@ -489,6 +486,10 @@ To make variable names more descriptive, prefix 't' or 'f' is replaced by englis
 and useless dots at end of variable names are removed
 
 		colnames(Data) <- str_replace_all(colnames(Data), '\\.$', '')
+		
+save all tidy data
+
+		TidyData <<- Data
 
 
 <u>STEP 5: Creates a second, independent tidy data set with the average of each variable for each activity and each subject.</u>
@@ -499,8 +500,8 @@ A newly created function (GenerateAverageSet() ) is used for this Step.
         NewAverageData <<- data.frame()
         	for(i in 1:30){
             		for(n in 1:6){
-                		Output <- Data[(Data$SubjectId == i & 
-                		Data$ActivityCode == n),]
+                		Output <- TidyData[(Data$SubjectId == i & 
+                		TidyData$ActivityCode == n),]
                		 Means <- t(colMeans(Output[5:90]))
                 
                 		NewRow <- as.data.frame(c(Output[1,1:4], Means))
@@ -529,6 +530,6 @@ To conclude, the run_analysis() function <u>saves 2 files</u> into the R working
 * TidyData.txt that comprises all the tidy data
 * NewAverageData.txt, that is a second, independent tidy data set comprising only the average of each variable for each activity and each subject
 
-		write.table(Data, file='TidyData.txt', row.names=FALSE, sep='\t')
+		write.table(TidyData, file='TidyData.txt', row.names=FALSE, sep='\t')
 		write.table(NewAverageData, file='NewAverageData.txt', 
 			row.names=FALSE, sep='\t')
